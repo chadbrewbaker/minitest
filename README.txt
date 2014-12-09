@@ -1,4 +1,4 @@
-= minitest/{unit,spec,mock,benchmark}
+= minitest/{unit,spec,mock,benchmark,gen,check}
 
 home :: https://github.com/seattlerb/minitest
 bugs :: https://github.com/seattlerb/minitest/issues
