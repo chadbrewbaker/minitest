@@ -46,6 +46,10 @@ implementors that need a minimal set of methods to bootstrap a working
 test suite. For example, there is no magic involved for test-case
 discovery.
 
+minitest/gen is for generating test cases.
+
+minitest/check provides property based testing.
+
     "Again, I can't praise enough the idea of a testing/specing
      framework that I can actually read in full in one sitting!"
 
@@ -70,6 +74,8 @@ extract-method refactorings still apply.
 * minitest/mock - a simple and clean mock/stub system.
 * minitest/benchmark - an awesome way to assert your algorithm's performance.
 * minitest/pride - show your pride in testing!
+* minitest/gen - a simple way to specify property based tests.
+* minitest/check - a property checker with built in shrinking.
 * Incredibly small and fast runner, but no bells and whistles.
 
 == RATIONALE:
@@ -526,6 +532,7 @@ Authors... Please send me a pull request with a description of your minitest ext
 * minitest-spec-should
 * minitest-sugar
 * minitest_should
+
 * mongoid-minitest
 * spork-minitest
 
