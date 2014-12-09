@@ -23,6 +23,9 @@ def mtest(a,b)
 		puts "----"
 	end
 end
+mtest("A", "A")
+mtest(1, 1)
+mtest([],[])
 
 def rest( c )
 	c.drop(1)
@@ -83,7 +86,11 @@ mtest(exclude_nth(2, s), [1,2])
 #   [inner-root (concat (map join children)
 #                       inner-children)])
 
+def join(x)
+	x
+end
 
+# [1, [[2, [ [23, []] ], [3, []]    ]]
 
 # (defn root
 #   "Returns the root of a Rose tree."
@@ -92,7 +99,7 @@ mtest(exclude_nth(2, s), [1,2])
 #   root)
 
 def root(rtree)
-
+	return rtree.first
 end
 
 # (defn children
@@ -148,7 +155,7 @@ mtest(fmap(double, []), [])
 mtest(fmap(double, [1, []] ), [2, []])
 mtest(fmap(double, [1, [ [1,[]] ] ]), [2, [ [2, []] ]])
 mtest(fmap(double, [1, [[2,[]], [3, []]]  ]), [2, [[4, []], [6, []]]])
-
+mtest(fmap(double, [1, [[2,[]], [3, [ [4, []]  ]]]  ]), [2, [[4, []], [6, [ [8,[]]    ]]]])
 
 
 
@@ -159,6 +166,9 @@ mtest(fmap(double, [1, [[2,[]], [3, []]]  ]), [2, [[4, []], [6, []]]])
 #   {:no-doc true}
 #   [m k]
 #   (join (fmap k m)))
+def bind(k,m)
+   join(fmap(k,m))
+end
 
 # (defn filter
 #   "Returns a new Rose tree whose values pass `pred`. Values who
