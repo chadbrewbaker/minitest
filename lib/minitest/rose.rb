@@ -15,6 +15,15 @@
 #         (cons (first s)
 #               (exclude-nth (dec n) (rest s)))))))
 
+def mtest(a,b)
+	if(a.inspect != b.inspect)
+		puts "Error"
+		puts a.inspect
+		puts b.inspect
+		puts "----"
+	end
+end
+
 def rest( c )
 	c.drop(1)
 end
@@ -45,6 +54,26 @@ def exclude_nth(n,collection)
 	end
 end
 
+mtest(exclude_nth(0, [1,2,3]), [2,3])
+mtest(exclude_nth(1, [1,2,3]), [1,3])
+mtest(exclude_nth(2, [1,2,3]), [1,2])
+h ={}
+h['a'] =1
+h[3] = 'b'
+h[5] = "dog"
+mtest(exclude_nth(0, h), {3=>"b", 5=>"dog"})
+mtest(exclude_nth(1, h), {"a"=>1, 5=>"dog"})
+mtest(exclude_nth(2, h), {"a"=>1, 3=>"b"})
+require 'set'
+s = Set.new [1,2,3]  
+mtest(exclude_nth(0, s), [2, 3])
+mtest(exclude_nth(1, s), [1,3])
+mtest(exclude_nth(2, s), [1,2])
+
+
+
+
+
 
 # (defn join
 #   "Turn a tree of trees into a single tree. Does this by concatenating
@@ -54,11 +83,17 @@ end
 #   [inner-root (concat (map join children)
 #                       inner-children)])
 
+
+
 # (defn root
 #   "Returns the root of a Rose tree."
 #   {:no-doc true}
 #   [[root _children]]
 #   root)
+
+def root(rtree)
+
+end
 
 # (defn children
 #   "Returns the children of the root of the Rose tree."
@@ -66,17 +101,56 @@ end
 #   [[_root children]]
 #   children)
 
+def children(rtree)
+	if rtree == []
+		return []
+	else
+		rtree[1]
+	end
+end
+
+#puts children( [0, []]     ).inspect
+#puts children( [0, [ [1,[]]           ]]     ).inspect
+#puts children( [0, [ [1,[]], [3,[]]  , [5,[]]          ]]     ).inspect
+
 # (defn pure
 #   "Puts a value `x` into a Rose tree, with no children."
 #   {:no-doc true}
 #   [x]
 #   [x []])
 
+def pure(x)
+	return [x, []]
+end
+mtest(pure(5), [5,[]])
+mtest(pure("Jaberwocky"), ["Jaberwocky",[]])
+
 # (defn fmap
 #   "Applies functions `f` to all values in the tree."
 #   {:no-doc true}
 #   [f [root children]]
 #   [(f root) (map (partial fmap f) children)])
+
+def fmap(f, rtree)
+	if rtree == []
+		return []
+	end
+	if(rtree.length != 2)
+		puts "ERROR"
+		puts rtree.inspect
+		puts "ERROR"
+	end
+
+	return [f.call(rtree.first)] + [rtree[1].inject([]) { |result, element| result + [fmap(f,element)] }]
+end
+double = ->(x) { x+x }
+mtest(fmap(double, []), [])
+mtest(fmap(double, [1, []] ), [2, []])
+mtest(fmap(double, [1, [ [1,[]] ] ]), [2, [ [2, []] ]])
+mtest(fmap(double, [1, [[2,[]], [3, []]]  ]), [2, [[4, []], [6, []]]])
+
+
+
 
 # (defn bind
 #   "Takes a Rose tree (m) and a function (k) from
@@ -170,21 +244,7 @@ end
 
 ####TESTS####
 
-puts exclude_nth(0, [1,2,3]).inspect
-puts exclude_nth(1, [1,2,3]).inspect
-puts exclude_nth(2, [1,2,3]).inspect
-h ={}
-h['a'] =1
-h[3] = 'b'
-h[5] = "dog"
-puts exclude_nth(0, h).inspect
-puts exclude_nth(1, h).inspect
-puts exclude_nth(2, h).inspect
-require 'set'
-s = Set.new [1, 2,3]  
-puts exclude_nth(0, s).inspect
-puts exclude_nth(1, s).inspect
-puts exclude_nth(2, s).inspect
+
 
 
 #puts exclude_nth(0,h).inspect
