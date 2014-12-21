@@ -86,9 +86,22 @@ mtest(exclude_nth(2, s), [1,2])
 #   [inner-root (concat (map join children)
 #                       inner-children)])
 
+#join :: [inner_root inner_children] -> children -> ???
+#join [ir ic] c = [ir (concat (map join c) ic)]		
+
+
 def join(x)
 	x
 end
+
+
+#(rose/join [])
+#[nil ()]
+
+
+#(rose/join [[] []])
+#[nil ()]
+
 
 # [1, [[2, [ [23, []] ], [3, []]    ]]
 
@@ -132,6 +145,20 @@ end
 mtest(pure(5), [5,[]])
 mtest(pure("Jaberwocky"), ["Jaberwocky",[]])
 
+#(rose/pure "cat")
+#["cat" []]
+
+
+#(defn depth-one-children
+#  [[root children]]
+#  (into [] (map rose/root children)))
+
+#(depth-one-children ["cat" [  [1] [2] [3] ]])
+#[1 2 3]
+
+
+
+
 # (defn fmap
 #   "Applies functions `f` to all values in the tree."
 #   {:no-doc true}
@@ -157,6 +184,11 @@ mtest(fmap(double, [1, [ [1,[]] ] ]), [2, [ [2, []] ]])
 mtest(fmap(double, [1, [[2,[]], [3, []]]  ]), [2, [[4, []], [6, []]]])
 mtest(fmap(double, [1, [[2,[]], [3, [ [4, []]  ]]]  ]), [2, [[4, []], [6, [ [8,[]]    ]]]])
 
+#(rose/fmap inc (rose/pure 33))
+#[34 ()]
+
+#(rose/fmap inc [1, [ [1,[]] ] ])
+#[2 ([2 ()])]
 
 
 # (defn bind
@@ -221,6 +253,14 @@ end
 #   [root (concat (map collapse the-children)
 #                 (map collapse
 #                      (mapcat children the-children)))])
+
+#(rose/collapse (rose/pure "cat"))
+#["cat" ()]
+
+#(rose/collapse ["cat" [  [1] [2] [3] ]])
+#["cat" ([1 ()] [2 ()] [3 ()])]
+
+
 
 # (defn- make-stack
 #   [children stack]
