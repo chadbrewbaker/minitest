@@ -7,7 +7,7 @@ require "minitest/parallel"
 # :include: README.txt
 
 module Minitest
-  VERSION = "5.4.3" # :nodoc:
+  VERSION = "5.5.1" # :nodoc:
   ENCS = "".respond_to? :encoding # :nodoc:
 
   @@installed_at_exit ||= false
@@ -166,7 +166,8 @@ module Minitest
         exit
       end
 
-      opts.on "-s", "--seed SEED", Integer, "Sets random seed" do |m|
+      desc = "Sets random seed. Also via env. Eg: SEED=n rake"
+      opts.on "-s", "--seed SEED", Integer, desc do |m|
         options[:seed] = m.to_i
       end
 
@@ -290,6 +291,12 @@ module Minitest
       end
     end
 
+    ##
+    # Runs a single method and has the reporter record the result.
+    # This was considered internal API but is factored out of run so
+    # that subclasses can specialize the running of an individual
+    # test. See Minitest::ParallelTest::ClassMethods for an example.
+
     def self.run_one_method klass, method_name, reporter
       reporter.record Minitest.run_one_method(klass, method_name)
     end
@@ -307,7 +314,7 @@ module Minitest
       on_signal "INFO", handler, &block
     end
 
-    SIGNALS = Signal.list
+    SIGNALS = Signal.list # :nodoc:
 
     def self.on_signal name, action # :nodoc:
       supported = SIGNALS[name]
